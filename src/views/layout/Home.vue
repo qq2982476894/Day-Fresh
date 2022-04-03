@@ -2,7 +2,7 @@
   <div class="home-container">
     <LeftList :collapsed='collapsed'/>
     <div :class="{'app-container':true,'menu-unfold':collapsed}">
-      <HeadNav :collapsed='collapsed'/>
+      <HeadNav :collapsed='collapsed' :user='user'/>
       <div class="main">
           <router-view></router-view>
       </div>
@@ -25,7 +25,7 @@ export default {
     }
   },
   computed:{
-      ...mapState(['collapsed'])
+      ...mapState(['collapsed','user'])
   },
   methods: {
    

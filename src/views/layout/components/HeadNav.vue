@@ -13,10 +13,10 @@
       </a-breadcrumb>
     </div>
     <ul class="user-info">
-      <li>wangsilong
+      <li>{{user.username}}
         <a-icon type="down" />
       </li>
-      <li>退出</li>
+      <li @click="handleOut">退出</li>
     </ul>
   </div>
 </template>
@@ -26,11 +26,18 @@ export default {
     props:{
         collapsed:{
             type:Boolean
+        },
+        user:{
+            type:Object
         }
     },
     methods:{
        toggleCollapsed(){
            this.$store.dispatch('setCollapsed')
+        },
+        handleOut(){
+            this.$store.dispatch('loginOut')
+            this.$router.push({name:'Login'})
         }
     }
 }
