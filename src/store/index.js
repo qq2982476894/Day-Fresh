@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     collapsed:false,
     user:userCookies.getUserCookies(),
+    menuRoutes:[]
   },
  getters:{
     isLogin(state){
@@ -27,6 +28,9 @@ export default new Vuex.Store({
             appkey:'',
             role:''
         };
+    },
+    setMenuRoutes(state,routes){
+        state.menuRoutes = routes
     }
   },
   actions: {
@@ -40,6 +44,9 @@ export default new Vuex.Store({
     loginOut({commit}){
         commit('loginOut');
         userCookies.removeUserCookies()
+    },
+    setMenuRoutes({commit},routes){
+        commit('setMenuRoutes',routes)
     }
   },
   modules: {

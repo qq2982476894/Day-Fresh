@@ -2,28 +2,84 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import store from '@/store';
 const Login = () => import('@/views/Login.vue');
-Vue.use(VueRouter);
+import Home from '@/views/layout/Home.vue';
+import getMenuRoutes from '@/utils/permission.js';
 
+Vue.use(VueRouter);
+const asyncRoutes = [
+    {
+		path: '/product',
+		name: 'Product',
+		component: Home,
+		meta: {
+			title: '商品',
+			requiresAuth: true,
+            icon:'profile'
+		},
+		children: [
+			{
+				path: 'list',
+				name: 'productList',
+				component: () => import('@/views/pages/proList.vue'),
+				meta: {
+					title: '商品列表',
+                    icon:'unordered-list'
+				},
+			},
+			{
+				path: 'add',
+				name: 'productAdd',
+				component: () => import('@/views/pages/proAdd.vue'),
+				meta: {
+					title: '添加商品',
+                    icon:'file-add'
+				},
+			},
+			{
+				path: 'category',
+				name: 'Category',
+				component: () => import('@/views/pages/category.vue'),
+				meta: {
+					title: '商品种类',
+                    icon:'gold'
+				},
+			},
+		],
+	},
+];
 const routes = [
 	{
 		path: '/',
 		name: 'Home',
-		// route level code-splitting
-		// this generates a separate chunk (Home.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
-		component: () =>
-			import(/* webpackChunkName: "Home" */ '@/views/layout/Home.vue'),
-		children: [],
+        redirect:'/index',
+		component: Home,
+		children: [
+			{
+				path: 'index',
+				name: 'Index',
+				component: () => import('@/views/pages/index.vue'),
+				meta: {
+					title: '统计',
+                    icon:'area-chart'
+				},
+			},
+		],
 		meta: {
 			requiresAuth: true,
+			title: '首页',
+            icon:'home'
 		},
 	},
+
+
 	{
 		path: '/login',
 		name: 'Login',
 		component: Login,
 		meta: {
+            title:'login',
 			name: 'my name is Login',
+            hide:true
 		},
 	},
 ];
@@ -33,12 +89,20 @@ const router = new VueRouter({
 	base: process.env.BASE_URL,
 	routes,
 });
-
+let isAddRoutes = false;
 router.beforeEach((to, from, next) => {
-    console.log(to)
 	const isLogin = store.getters.isLogin;
-	if (to.matched.some(r=>r.meta.requiresAuth)) {
-		isLogin ? next():next('/login')
+    
+	if (to.matched.some((r) => r.meta.requiresAuth)||to.path!='login') {
+		if (!isAddRoutes) {
+            // store.state.user.role
+			const menuRoutes = getMenuRoutes('admin', asyncRoutes);
+            store.dispatch('setMenuRoutes',routes.concat(menuRoutes)).then(()=>{
+             router.addRoute(...menuRoutes)
+            })
+			isAddRoutes = true;
+		}
+		isLogin ? next() : next('/login');
 	} else {
 		next();
 	}

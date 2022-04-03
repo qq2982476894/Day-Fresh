@@ -1,42 +1,44 @@
 <template>
-  <div class="left-list">
-    <a-menu :default-selected-keys="['1']"
-            :default-open-keys="['sub1']"
+  <div class="left-list" v-if="menuRoutes">
+    <a-menu :default-selected-keys="[$router.currentRoute.matched[1].name]"
+            :default-open-keys="[$router.currentRoute.matched[0].name]"
             mode="inline"
             theme="dark"
             :inline-collapsed="collapsed">
-      <a-sub-menu>
-        <span slot="title">
-          <a-icon type='home' /><span>首页</span>
-        </span>
-        <a-menu-item key="1">
-          <a-icon type="area-chart" />
-          <span>统计</span>
-        </a-menu-item>
-      </a-sub-menu>
-      <a-sub-menu key="sub1">
-        <span slot="title">
-          <a-icon type="mail" /><span>商品</span>
-        </span>
-        <a-menu-item key="5">
-          <a-icon type="unordered-list" />
-          <span>商品列表</span>
-        </a-menu-item>
-        <a-menu-item key="6">
-          <a-icon type="file-add" /><span>添加商品</span>
-        </a-menu-item>
-      </a-sub-menu>
+      <template v-for="route in menuRoutes">
+        <a-sub-menu v-if="!route.meta.hide"
+                    :key="route.name">
+          <span slot="title">
+            <a-icon :type='route.meta.icon' /><span>{{route.meta.title}}</span>
+          </span>
+          <template v-for="children in route.children">
+            <a-menu-item :key="children.name">
+              <router-link :to="{name:children.name}"></router-link>
+              <a-icon :type="children.meta.icon" /><span>{{children.meta.title}}</span>
+
+            </a-menu-item>
+          </template>
+
+        </a-sub-menu>
+      </template>
 
     </a-menu>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     collapsed: {
       type: Boolean,
     },
+  },
+  computed: {
+    ...mapState(['menuRoutes']),
+  },
+  mounted() {
+  
   },
 }
 </script>

@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
     props:{
         collapsed:{
@@ -30,6 +31,9 @@ export default {
         user:{
             type:Object
         }
+    },
+    computed:{
+        ...mapState(['menuRoutes'])
     },
     methods:{
        toggleCollapsed(){
