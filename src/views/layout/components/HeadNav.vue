@@ -6,10 +6,15 @@
     </a-button>
     <div class="breadcrumb">
       <a-breadcrumb>
-        <a-breadcrumb-item>Home</a-breadcrumb-item>
-        <a-breadcrumb-item><a href="">Application Center</a></a-breadcrumb-item>
+        <a-breadcrumb-item v-for="bread in breadList"
+                           :key="bread.title">
+          <router-link :to='bread.path'>
+            {{bread.title}}
+          </router-link>
+        </a-breadcrumb-item>
+        <!-- <a-breadcrumb-item><a href="">Application Center</a></a-breadcrumb-item>
         <a-breadcrumb-item><a href="">Application List</a></a-breadcrumb-item>
-        <a-breadcrumb-item>An Application</a-breadcrumb-item>
+        <a-breadcrumb-item>An Application</a-breadcrumb-item> -->
       </a-breadcrumb>
     </div>
     <ul class="user-info">
@@ -22,32 +27,43 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
-    props:{
-        collapsed:{
-            type:Boolean
-        },
-        user:{
-            type:Object
-        }
+  props: {
+    collapsed: {
+      type: Boolean,
     },
-    computed:{
-        ...mapState(['menuRoutes'])
+    user: {
+      type: Object,
     },
-    methods:{
-       toggleCollapsed(){
-           this.$store.dispatch('setCollapsed')
-        },
-        handleOut(){
-            this.$store.dispatch('loginOut')
-            this.$router.push({name:'Login'})
+  },
+  computed: {
+    ...mapState(['menuRoutes']),
+    breadList() {
+      const breadArr = this.$route.matched
+      return breadArr.map((item) => {
+        return {
+          title: item.meta.title,
+          path: item.path,
         }
-    }
+      })
+    },
+  },
+  methods: {
+    toggleCollapsed() {
+      this.$store.dispatch('setCollapsed')
+    },
+    handleOut() {
+      this.$store.dispatch('loginOut')
+      this.$router.push({ name: 'Login' })
+    },
+  },
+  mounted() {
+    console.log(this.breadList)
+  },
 }
 </script>
 
 <style lang="less" scoped>
-
 </style>
 
