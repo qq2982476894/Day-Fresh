@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     collapsed:false,
-    user:userCookies.getUserCookies(),
+    user:userCookies.getUserCookies() || {},
     menuRoutes:[]
   },
  getters:{

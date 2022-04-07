@@ -10,6 +10,7 @@ import 'ant-design-vue/dist/antd.css'
 
 Vue.use(Antd)
 Vue.component(VeLine.name, VeLine)
+
 new Vue({
 	router,
 	store,

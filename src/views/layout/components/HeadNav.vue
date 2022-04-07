@@ -58,9 +58,6 @@ export default {
       this.$router.push({ name: 'Login' })
     },
   },
-  mounted() {
-    console.log(this.breadList)
-  },
 }
 </script>
 

@@ -3,7 +3,7 @@
  */
 const roleToRoutes = {
 	coustomer: ['productList','Product'],
-	admin: ['productList', 'productAdd', 'Product', 'Category'],
+	admin: ['productList', 'productAdd', 'Product', 'Category','productEdit'],
 };
 /**
  * 得到菜单不渲染路由
